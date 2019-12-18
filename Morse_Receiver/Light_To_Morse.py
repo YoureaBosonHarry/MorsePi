@@ -14,7 +14,7 @@ running_average = 0
 number_of_frames = 0
 running_sum = 0
 on = 0
-off = 0
+off = 1
 state = "off"
 morse_list = []
 morse = {"on": {time_constant: "dot", 3*time_constant: "dash"}, "off": {time_constant: "intra_letter", 3*time_constant: "next_letter", 7*time_constant: "word_space"}}
@@ -103,7 +103,7 @@ def print_word(morse_word):
         else:
             letter += "".join(f"{i} ")
     joined_word = "".join(i for i in word)
-    requests.post(screen_endpoint, json={"word": joined_word})
+    #requests.post(screen_endpoint, json={"word": joined_word})
 
 def capture_morse():
     cap = cv2.VideoCapture(0)
