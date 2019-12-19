@@ -9,7 +9,7 @@ screen_endpoint = os.environ.get("SCREENENDPOINT", None)
 frame_rate = 10
 last_frame = 0
 led_constant = 1.1
-time_constant = np.round(1/frame_rate, 1)
+time_constant = 0.1
 running_average = 0
 number_of_frames = 0
 running_sum = 0
@@ -76,19 +76,19 @@ def detect_light(image):
                     morse_list.append(morse[state][time_constant])
                 elif on >= 3*time_constant and on < 7*time_constant:
                     morse_list.append(morse[state][3*time_constant])
-                print(morse_list)
             except:
                 pass
         off += time_constant
-        if off >  9*time_constant:
-            morse_list = []
-        elif off > 0 and off < 2*time_constant:
+        if off > 0 and off < 2*time_constant:
             morse_list.append("intra_letter")
-        elif off >= 2*time_constant and off <= 4*time_constant:
+        elif off >= 3*time_constant and off <= 4*time_constant:
+            morse_list.pop(-1)
             morse_list.append("next_letter")
         elif off >= 6*time_constant and off <= 8*time_constant:
             morse_list.append("word_space")
             print_word(morse_list)
+            morse_list = []
+        if off >  9*time_constant:
             morse_list = []
         on = 0
         state = "off"
@@ -98,11 +98,15 @@ def print_word(morse_word):
     word = []
     for i in morse_word:
         if i == "next_letter":
-            word.append(morse_to_letter[letter.strip()])
+            try:
+                word.append(morse_to_letter[letter.strip()])
+            except KeyError:
+                word.append("?")
             letter = ""
         else:
             letter += "".join(f"{i} ")
     joined_word = "".join(i for i in word)
+    print(joined_word)
     #requests.post(screen_endpoint, json={"word": joined_word})
 
 def capture_morse():
@@ -115,7 +119,7 @@ def capture_morse():
         if type(frame) == type(None):
             break
         detect_light(frame)
-        time.sleep(1/frame_rate)
+        time.sleep(np.round(1/frame_rate, 1))
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
