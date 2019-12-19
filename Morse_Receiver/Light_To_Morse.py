@@ -6,10 +6,10 @@ import time
 
 screen_endpoint = os.environ.get("SCREENENDPOINT", None)
 
-frame_rate = 10
+frame_rate = 2
 last_frame = 0
 led_constant = 1.1
-time_constant = 0.1
+time_constant = 0.5
 running_average = 0
 number_of_frames = 0
 running_sum = 0
@@ -35,7 +35,7 @@ morse_to_letter = {
 "dash intra_letter dash": "m",
 "dash intra_letter dot": "n",
 "dash intra_letter dash intra_letter dash": "o",
-"dot intra_letter dash intra_letter dash intra_letter": "p",
+"dot intra_letter dash intra_letter dash intra_letter dot": "p",
 "dash intra_letter dash intra_letter dot intra_letter dot": "q",
 "dot intra_letter dash intra_letter dot": "r",
 "dot intra_letter dot intra_letter dot": "s",
@@ -46,7 +46,7 @@ morse_to_letter = {
 "dash intra_letter dot intra_letter dot intra_letter dash": "x",
 "dash intra_letter dot intra_letter dash intra_letter dash": "y",
 "dash intra_letter dash intra_letter dot intra_letter dot": "z"
-} 
+}
 
 def detect_light(image):
     global last_frame
@@ -82,7 +82,8 @@ def detect_light(image):
         if off > 0 and off < 2*time_constant:
             morse_list.append("intra_letter")
         elif off >= 3*time_constant and off <= 4*time_constant:
-            morse_list.pop(-1)
+            if morse_list:
+                morse_list.pop(-1)
             morse_list.append("next_letter")
         elif off >= 6*time_constant and off <= 8*time_constant:
             morse_list.append("word_space")
