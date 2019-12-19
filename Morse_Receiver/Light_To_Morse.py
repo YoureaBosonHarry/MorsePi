@@ -72,7 +72,7 @@ def detect_light(image):
     else:
         if state == "on":
             try:
-                if on < 3*time_constant:
+                if on < 2.5*time_constant:
                     morse_list.append(morse[state][time_constant])
                 elif on >= 3*time_constant and on < 7*time_constant:
                     morse_list.append(morse[state][3*time_constant])
