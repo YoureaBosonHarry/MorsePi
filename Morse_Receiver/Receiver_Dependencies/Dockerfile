@@ -12,7 +12,7 @@ RUN apt-get -y install libavresample-dev x264 v4l-utils libprotobuf-dev protobuf
 RUN apt-get -y install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
 RUN apt-get -y install python3-dev python3-pip python3-testresources python3-setuptools
 RUN pip3 install --upgrade pip
-RUN pip3 install numpy 
+RUN pip3 install numpy requests
 RUN git clone https://github.com/opencv/opencv.git
 RUN git clone https://github.com/opencv/opencv_contrib.git
 RUN cd opencv && mkdir build && cd build && cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local \
